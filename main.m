@@ -67,9 +67,38 @@ grid on;
 %% Power Efficiency Analysis
 % Calculate required SNR for BER = 10^-4
 target_ber = 1e-4;
-required_snr_bpsk = interp1(ber_bpsk, SNR_dB, target_ber, 'linear', 'extrap');
-required_snr_qpsk = interp1(ber_qpsk, SNR_dB, target_ber, 'linear', 'extrap');
-required_snr_16qam = interp1(ber_16qam, SNR_dB, target_ber, 'linear', 'extrap');
+
+% Fix for interp1 unique points requirement
+% Instead of interpolating BER to SNR, we'll interpolate SNR to BER
+% This avoids the issue of duplicate BER values
+
+% For BPSK
+% Ensure BER values are unique and in descending order
+[ber_bpsk_unique, idx] = unique(ber_bpsk, 'stable');
+snr_bpsk_unique = SNR_dB(idx);
+if length(ber_bpsk_unique) > 1
+    required_snr_bpsk = interp1(log10(ber_bpsk_unique), snr_bpsk_unique, log10(target_ber), 'linear', 'extrap');
+else
+    required_snr_bpsk = NaN; % Not enough points for interpolation
+end
+
+% For QPSK
+[ber_qpsk_unique, idx] = unique(ber_qpsk, 'stable');
+snr_qpsk_unique = SNR_dB(idx);
+if length(ber_qpsk_unique) > 1
+    required_snr_qpsk = interp1(log10(ber_qpsk_unique), snr_qpsk_unique, log10(target_ber), 'linear', 'extrap');
+else
+    required_snr_qpsk = NaN;
+end
+
+% For 16-QAM
+[ber_16qam_unique, idx] = unique(ber_16qam, 'stable');
+snr_16qam_unique = SNR_dB(idx);
+if length(ber_16qam_unique) > 1
+    required_snr_16qam = interp1(log10(ber_16qam_unique), snr_16qam_unique, log10(target_ber), 'linear', 'extrap');
+else
+    required_snr_16qam = NaN;
+end
 
 figure;
 bar([required_snr_bpsk, required_snr_qpsk, required_snr_16qam]);
