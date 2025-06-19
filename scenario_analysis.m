@@ -46,7 +46,10 @@ scores = [
 ];
 
 % Calculate weighted scores
-weighted_scores = weights' * scores;
+weighted_scores = zeros(1, size(scores, 2));
+for i = 1:length(weights)
+    weighted_scores = weighted_scores + weights(i) * scores(i, :);
+end
 [best_score, best_idx] = max(weighted_scores);
 
 % Map index to modulation type

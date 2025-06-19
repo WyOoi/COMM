@@ -79,24 +79,21 @@ switch upper(modType)
         % Group bits into groups of 4
         dataReshaped = reshape(data, 4, [])';
         
-        % 16-QAM Mapping (Gray coded)
-        % Create 16-QAM constellation
-        qamModulator = comm.RectangularQAMModulator('ModulationOrder', 16, ...
-                                                   'BitInput', true, ...
-                                                   'NormalizationMethod', 'Average power');
+        % Convert bit groups to decimal symbols
+        symbols = bi2de(dataReshaped, 'left-msb');
         
-        % Modulate
-        txSignal = qamModulator(data);
+        % 16-QAM Modulation using qammod
+        txSignal = qammod(symbols, 16, 'gray', 'UnitAveragePower', true);
         
         % Add AWGN noise
         rxSignal = awgn(txSignal, SNR_dB, 'measured');
         
-        % Demodulate
-        qamDemodulator = comm.RectangularQAMDemodulator('ModulationOrder', 16, ...
-                                                       'BitOutput', true, ...
-                                                       'NormalizationMethod', 'Average power');
+        % 16-QAM Demodulation using qamdemod
+        rxSymbols = qamdemod(rxSignal, 16, 'gray', 'UnitAveragePower', true);
         
-        rxData = qamDemodulator(rxSignal);
+        % Convert symbols back to bits
+        rxBits = de2bi(rxSymbols, 4, 'left-msb');
+        rxData = reshape(rxBits', [], 1);
         rxData = rxData(1:length(data)); % Trim to original length
         
         % Calculate BER
