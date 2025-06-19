@@ -47,7 +47,8 @@ xlabel('SNR (dB)');
 ylabel('Bit Error Rate (BER)');
 title('BER Performance Comparison of Digital Modulation Techniques');
 legend('BPSK', 'QPSK', '16-QAM', 'Location', 'southwest');
-saveas(gcf, 'ber_comparison.png');
+% Instead of saving, just display the figure
+% saveas(gcf, 'ber_comparison.png');
 
 %% Bandwidth Efficiency Analysis
 % Calculate spectral efficiency (bits/s/Hz)
@@ -61,7 +62,7 @@ set(gca, 'XTickLabel', {'BPSK', 'QPSK', '16-QAM'});
 ylabel('Spectral Efficiency (bits/s/Hz)');
 title('Bandwidth Efficiency Comparison');
 grid on;
-saveas(gcf, 'bandwidth_efficiency.png');
+% saveas(gcf, 'bandwidth_efficiency.png');
 
 %% Power Efficiency Analysis
 % Calculate required SNR for BER = 10^-4
@@ -76,7 +77,7 @@ set(gca, 'XTickLabel', {'BPSK', 'QPSK', '16-QAM'});
 ylabel('Required SNR (dB) for BER = 10^{-4}');
 title('Power Efficiency Comparison');
 grid on;
-saveas(gcf, 'power_efficiency.png');
+% saveas(gcf, 'power_efficiency.png');
 
 %% Display Results and Recommendation
 fprintf('\n\n===== MODULATION TECHNIQUE COMPARISON RESULTS =====\n');

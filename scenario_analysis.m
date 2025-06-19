@@ -148,4 +148,4 @@ hold off;
 % Adjust figure layout
 sgtitle('Modulation Technique Comparison for Satellite Data Uplink');
 set(gcf, 'Position', [100, 100, 1000, 800]);
-saveas(gcf, 'final_comparison.png'); 
+% saveas(gcf, 'final_comparison.png'); 
